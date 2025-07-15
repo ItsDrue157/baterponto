@@ -10,6 +10,9 @@ nome: Controle de Ponto Digital
 prazo: ???
 
 
+foi usado ia para consulta, verificação de erros e outros. Nenhum trecho deste codigo foi feito puramente por ia.
+
+
 Ideias: 
 registrar o nome do func e o horario de entrada e depois o de saida, usando datetime(). 
 formatar e guarda (pensar dps exibir lista de horarios dos funcionarios (admin))

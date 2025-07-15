@@ -1,11 +1,12 @@
-import time
 import datetime
-import os
 import sqlite3
+from pathlib import Path
 
 class FuncionarioDB:
     def __init__(self, caminho_db):
-        self.caminho_db = r"C:\Users\Carlos\Desktop\baterponto\baterponto\server\funcionarios.db"
+        base_dir = Path(__file__).resolve().parent  # diretório do arquivo atual
+        if caminho_db is None:
+            caminho_db = base_dir / "server" / "funcionarios.db"
         self.conn = sqlite3.connect(caminho_db)
         self.criar_tabela()
 
