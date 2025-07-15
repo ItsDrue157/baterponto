@@ -1,16 +1,22 @@
 import time
 import datetime
 import os
+import sqlite3
+
+def conectarBancoDeDados():
+    global conexao, cursor
+    conexao = sqlite3.connect(r'C:\Users\Carlos\Desktop\baterponto\baterponto\server\ponto.db')
+    cursor = conexao.cursor()
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS usuarios (
+        id INTEGER PRIMARY KEY,
+        nome TEXT,
+        hora INTEGER
+    )
+    ''')
 
 
-def criarArquivo():
-    if os.path.exists(r"C:\Users\Carlos\Desktop\baterponto\baterponto\server\funcionarios.txt"):
-        print("Arquivo já existe")
-        pass
-    else:
-        arquivo = open(r"C:\Users\Carlos\Desktop\baterponto\baterponto\server\funcionarios.txt", "x")
-        arquivo.close()
-        print("Arquivo criado com sucesso")
 
 def registrarFuncionario():
         os.system('cls')
@@ -21,11 +27,10 @@ def registrarFuncionario():
         fName = input("Digite o primeiro nome do funcionario: ")
         lName = input("Digite o sobrenome do funcionario: ")
 
-        funcionario = fName + lName +" "+ str(hora_formatada) 
         
-        arquivo = open(r"C:\Users\Carlos\Desktop\baterponto\baterponto\server\funcionarios.txt", "a")
-        arquivo.write(funcionario + " " + "\n")
-        print(f"Funcionario: {fName} {lName} - Horario registrado com sucesso!")
+        conectarBancoDeDados()
+        cursor.execute("INSERT INTO usuarios (nome, hora) VALUES (?, ?)", (fName + lName, hora_formatada))
+        conexao.commit()
 
 def registrarSaida():
     os.system('cls')
@@ -34,27 +39,63 @@ def registrarSaida():
 
     fName = input("Digite o primeiro nome do funcionario: ")
     lName = input("Digite o ultimo nome funcionario: ")
-
-    funcionario = fName + lName +" "+ str(hora_formatada) 
     
-    arquivo = open(r"C:\Users\Carlos\Desktop\baterponto\baterponto\server\funcionarios.txt", "a")
-    arquivo.write(funcionario + " " + "\n")
+    conectarBancoDeDados()
+    cursor.execute("INSERT INTO usuarios (nome, hora) VALUES (?, ?)", (fName + lName, hora_formatada))
+    conexao.commit()
     print(f"Funcionario: {fName}  {lName} - Horario de saida registrado com sucesso!")
 
-
 def exibirFuncionarios():
-      os.system('cls')
-      with open(r"C:\Users\Carlos\Desktop\baterponto\baterponto\server\funcionarios.txt", ) as arquivo:
-            print("Lista de Funcionários:")
-            for nomes in arquivo:
-                print(nomes.strip())
+    os.system('cls')
+    escolhaExibir = input('''
+    Escolha uma opção:
+    1. Exibir todos os funcionarios
+    2. Escolher funcionario especifico
+    3. Voltar ao menu principal
+''')
 
+    match escolhaExibir:
+        case '1':  
+            #mostrar todos os func 
+            conectarBancoDeDados()
+            cursor.execute("SELECT * FROM usuarios")
+            resultados = cursor.fetchall()
+            for linha in resultados:
+                print(linha)
+        
+        
+        case '2':
+            conectarBancoDeDados()
+            nome_funcionario = input("Digite o nome do funcionario que deseja pesquisar: ")
+            cursor.execute("SELECT nome, hora FROM usuarios WHERE nome LIKE ?", ('%' + nome_funcionario + '%',))
+            resultado = cursor.fetchall()
+            if resultado:
+                print(f"Horários registrados para '{nome_funcionario}':")
+                for nome, hora in resultado:
+                    print(f"Nome: {nome} | Horário: {hora}")
+            else:
+                print("Funcionário não encontrado.")
+                
+            
 
 
 def sairPrograma():
     print("Saindo do programa...")
     time.sleep(2)
     exit()
+
+def criarArquivo():
+    if os.path.exists(r"C:\Users\Carlos\Desktop\baterponto\baterponto\server\funcionarios.txt"):
+        print("Arquivo já existe")
+        pass
+    else:
+        arquivo = open(r"C:\Users\Carlos\Desktop\baterponto\baterponto\server\funcionarios.txt", "x")
+        arquivo.close()
+        print("Arquivo criado com sucesso")
+
+
+
+
 
 
 
