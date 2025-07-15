@@ -30,6 +30,11 @@ pensar em um nome - nomeProjeto
 pensar em como fazer o menu gui 
 
 
+#dia 15/07
+criar sistema de cadastro de funcionario 
+criar sistema de login de funcionario 
+cadastrar cada hora em cada funcionario 
+
 
 
 menu via cli ✅
