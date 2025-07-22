@@ -57,7 +57,6 @@ def cadastrarHorasSaida(idFuncionario, nome):
     horarioSaida = datetime.datetime.now().strftime("%H:%M:%S")
     with sqlite3.connect('banco.db') as conn:
         cursor = conn.cursor()
-        # Atualiza o último registro de entrada sem saída
         cursor.execute(
             '''UPDATE horas SET hora_saida = ? 
                WHERE idFuncionario = ? AND data = ? AND hora_saida IS NULL''',
@@ -110,7 +109,16 @@ def login():
         pass
     
 
-
+def listarHorasFucionario(ifuncionario):
+    conn = sqlite3.connect('banco.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM horas WHERE idFuncionario = ?', (ifuncionario,))
+    horas = cursor.fetchall()
+    conn.close()
+    if horas:
+        print(f"Listando horas do funcionário {ifuncionario}:")
+        for hora in horas:
+            print(f"Data: {hora[3]}, Entrada: {hora[4]}, Saída: {hora[5]}")
 
 
 
@@ -125,6 +133,7 @@ while True:
     2. Listar Funcionarios  
     3. Fazer Login
     4. Sair
+    5. Listar horas de um Funcionario
                         
                         ''')
 
@@ -159,3 +168,6 @@ while True:
         case '4':
             print("Saindo do sistema...")
             break
+        case '5':
+            idFuncionario = input("Digite o ID do funcionário para listar as horas: ")
+            listarHorasFucionario(idFuncionario)

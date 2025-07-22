@@ -39,6 +39,7 @@ criar sistema de cadastro de funcionario ✅
 criar sistema de login de funcionario ✅
 cadastrar cada hora em cada funcionario ✅
 marcar data e hora em um banco separado ✅
+listar datas e horarios trabalhados de um funcionario especifico ✅
 
 
 
