@@ -1,140 +1,161 @@
-import datetime
+import os 
 import sqlite3
-from pathlib import Path
+import datetime 
 
-class FuncionarioDB:
-    def __init__(self, caminho_db):
-        base_dir = Path(__file__).resolve().parent  # diretório do arquivo atual
-        if caminho_db is None:
-            caminho_db = base_dir / "server" / "funcionarios.db"
-        self.conn = sqlite3.connect(caminho_db)
-        self.criar_tabela()
-
-    def criar_tabela(self):
-        with self.conn:
-            self.conn.execute('''
-                CREATE TABLE IF NOT EXISTS funcionarios (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    nome TEXT NOT NULL,
-                    horario_entrada TEXT,
-                    horario_saida TEXT
-                )
-            ''')
-
-    def cadastrar_funcionario(self, nome):
-        with self.conn:
-            self.conn.execute('INSERT INTO funcionarios (nome) VALUES (?)', (nome,))
-        print(f"Funcionário '{nome}' cadastrado com sucesso!")
-
-    def listar_funcionarios(self):
-        cursor = self.conn.execute('SELECT id, nome FROM funcionarios')
-        funcionarios = cursor.fetchall()
-        if funcionarios:
-            print("\nLista de Funcionários:")
-            for id_, nome in funcionarios:
-                print(f"{id_} - {nome}")
-        else:
-            print("Nenhum funcionário cadastrado.")
-    
-    def fazerLogin(self):
-        id_funcionario = input("Digite o ID do funcionário: ")
-        nome = input("Digite o nome do funcionário: ")
-        cursor = self.conn.execute(
-            'SELECT id, nome FROM funcionarios WHERE id = ? AND nome = ?', 
-            (id_funcionario, nome)
+def criarBanco():
+    conn = sqlite3.connect('banco.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS funcionarios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            idFuncionario INTEGER,
+            nome TEXT NOT NULL,
+            trabalhouHoje TEXT DEFAULT 'N' 
         )
-        resultado = cursor.fetchone()
-        if resultado:
-            print(f"Login realizado com sucesso para {nome} (ID: {id_funcionario})!")
-        else:
-            print("Funcionário não encontrado ou dados incorretos.")
+    ''')
+    conn.commit()
+    conn.close()
+criarBanco()
 
-    def __del__(self):
-        self.conn.close()
+def bancoDeHoras():
+    conn = sqlite3.connect('banco.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS horas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            idFuncionario TEXT,
+            nome TEXT,
+            data TEXT,
+            hora_entrada TEXT,
+            hora_saida TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
+bancoDeHoras()
 
-    def entradaDeHoras(self, id_funcionario):
-        hora_entrada = datetime.datetime.now().strftime("%H:%M:%S")
-        cursor = self.conn.cursor()
+
+
+
+
+
+
+def cadastrarHorasEntrada(idFuncionario, nome):
+    dataAtual = datetime.datetime.now().strftime("%Y-%m-%d")
+    horarioEntrada = datetime.datetime.now().strftime("%H:%M:%S")
+    with sqlite3.connect('banco.db') as conn:
+        cursor = conn.cursor()
         cursor.execute(
-            'UPDATE funcionarios SET horario_entrada = ? WHERE id = ?', 
-            (hora_entrada, id_funcionario)
+            'INSERT INTO horas (idFuncionario, nome, data, hora_entrada) VALUES (?, ?, ?, ?)',
+            (idFuncionario, nome, dataAtual, horarioEntrada)
         )
-        self.conn.commit()
-        print(f"Horário de entrada registrado para o ID {id_funcionario}: {hora_entrada}")
-        return hora_entrada
-    
-    def saidaDeHoras(self, id_funcionario):
-        hora_saida = datetime.datetime.now().strftime("%H:%M:%S")
-        cursor = self.conn.cursor()
+        print(f"Horário de ENTRADA registrado com sucesso para o funcionário {idFuncionario} ({nome}) às {horarioEntrada}")
+        conn.commit()
+
+def cadastrarHorasSaida(idFuncionario, nome):
+    dataAtual = datetime.datetime.now().strftime("%Y-%m-%d")
+    horarioSaida = datetime.datetime.now().strftime("%H:%M:%S")
+    with sqlite3.connect('banco.db') as conn:
+        cursor = conn.cursor()
+        # Atualiza o último registro de entrada sem saída
         cursor.execute(
-            'UPDATE funcionarios SET horario_saida = ? WHERE id = ?', 
-            (hora_saida, id_funcionario)
+            '''UPDATE horas SET hora_saida = ? 
+               WHERE idFuncionario = ? AND data = ? AND hora_saida IS NULL''',
+            (horarioSaida, idFuncionario, dataAtual)
         )
-        self.conn.commit()
-        print(f"Horário de saída registrado para o ID {id_funcionario}: {hora_saida}")
-        return hora_saida
+        if cursor.rowcount > 0:
+            print(f"Horário de saida registrado com sucesso para o funcionário {idFuncionario} ({nome}) as {horarioSaida}")
+        else:
+            print("Nenhum registro de entrada encontrado para hoje.")
+        conn.commit()
+        
 
 
-    def cadastrarHoras(self):
-        escolha = input('''Escolha uma opção:
+def menuLogin(idFuncionario, nome):
+    while True:        
+        escolhaMenu = input('''
         1. Registrar Horário de Entrada
         2. Registrar Horário de Saída
-        3. Voltar ao Menu Principal
-        ''')
-        match escolha:
+        3. Sair              
+                            ''')
+        match escolhaMenu:
             case '1':
-                id_funcionario = input("Digite o ID do funcionario para registrar o horário de entrada: ")
-                self.entradaDeHoras(id_funcionario)
-                print("Horário de entrada registrado com sucesso!")
+                cadastrarHorasEntrada(idFuncionario, nome)
             case '2':
-                id_funcionario = input("Digite o ID do funcionario para registrar o horário de saída: ")
-                self.saidaDeHoras(id_funcionario)
-                print("Horário de saída registrado com sucesso!")
+                cadastrarHorasSaida(idFuncionario, nome)
             case '3':
-                print("Voltando ao menu principal...")
-
-
-def menu():
-    db = FuncionarioDB(r"C:\Users\Carlos\Desktop\baterponto\baterponto\server\funcionarios.db")
-    while True:
-        escolha = input('''
-        Bem vindo ao Menu Principal!
-        1. Cadastrar Funcionário
-        2. Listar Funcionários
-        3. Sair
-        4. Fazer Login
-                        
-        Escolha uma opção: ''')
-        match escolha:
-            case '1':
-                nome = input("Digite o nome do funcionario: ")
-                db.cadastrar_funcionario(nome)
-            case '2':
-                db.listar_funcionarios()
-            case '3':
-                print("Saindo do programa...")
+                print("Saindo do sistema...")
                 break
-            case '4':
-                db.fazerLogin()
-                db.cadastrarHoras()
 
+
+
+
+
+
+def login():
+    nome = input("Digite o nome do funcionário: ")
+    idFuncionario = input("Digite o ID do funcionário: ")
+
+    if nome and idFuncionario:
+        conn = sqlite3.connect('banco.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM funcionarios WHERE idFuncionario = ? AND nome = ?', (idFuncionario, nome))
+        resultado = cursor.fetchone()
+
+        if resultado:
+            print(f"Login realizado com sucesso para {nome} (ID: {idFuncionario})!")
+            menuLogin(idFuncionario, nome)
+    else:
+        print("Funcionário não encontrado ou dados incorretos.")
+        pass
+    
+
+
+
+
+
+
+
+
+
+
+while True:
+    escolhaMenu = input('''
+    1. Cadastrar Funcionario
+    2. Listar Funcionarios  
+    3. Fazer Login
+    4. Sair
+                        
+                        ''')
+
+    match escolhaMenu:
+        case '1':
+            conn = sqlite3.connect('banco.db')
+            idFuncionario = input("Digite o ID do funcionário: ")
+            nomeFuncionario = input("Digite o nome do funcionário: ")
             
+            cursor = conn.cursor()
+            cursor.execute('INSERT INTO funcionarios (idFuncionario, nome) VALUES (?,?)', (idFuncionario, nomeFuncionario))
+            conn.commit()
+            conn.close()
+           
+            print(f"Funcionário '{nomeFuncionario}' cadastrado com sucesso com ID {idFuncionario}!")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-if __name__ == "__main__":
-    menu()
+        case '2':
+            conn = sqlite3.connect('banco.db')
+            cursor = conn.cursor()
+            cursor.execute('SELECT idFuncionario, nome FROM funcionarios')
+            funcionarios = cursor.fetchall()
+            
+            conn.close()
+            
+            print("Listando Funcionários:")
+            
+            for idFuncionario, nome in funcionarios:
+                 print(f"O Funcionário {nome} tem o id {idFuncionario}")
+        
+        case '3':
+            login()
+        case '4':
+            print("Saindo do sistema...")
+            break

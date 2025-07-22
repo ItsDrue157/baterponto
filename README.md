@@ -14,8 +14,7 @@ foi usado ia para consulta, verificação de erros e outros. Nenhum trecho deste
 
 
 Ideias: 
-registrar o nome do func e o horario de entrada e depois o de saida, usando datetime(). 
-formatar e guarda (pensar dps exibir lista de horarios dos funcionarios (admin))
+Fazer o controle dos horarios de entrada e o de saida de cada funcionario, bem como criar este funcionario inseri-lo no banco de dados.
 
 
 
@@ -23,33 +22,29 @@ formatar e guarda (pensar dps exibir lista de horarios dos funcionarios (admin))
 
 
 to do:
-sistema de bater ponto ✅
-entrada e saida ✅
-
-banco de dados ✅
-
-criar sistema para pesquisar nome do funcionario na lista e exibir somente os horarios dele ✅
-pensar em um nome - nomeProjeto
-pensar em como fazer o menu gui 
-
-
-
-
-
-menu via cli ✅
-menu via gui
-
-dia 14/07
-feito banco de dados em sqlite3 ✅
-
-melhorada funcoes do software   ✅
-
 total de horas dos funcionarios e individual
 
-#dia 15/07
+
+
+
+
+
+done: 
+sistema de bater ponto ✅
+entrada e saida ✅
+banco de dados ✅
+criar sistema para pesquisar nome do funcionario na lista e exibir somente os horarios dele ✅
+menu via cli ✅
 criar sistema de cadastro de funcionario ✅
 criar sistema de login de funcionario ✅
 cadastrar cada hora em cada funcionario ✅
+marcar data e hora em um banco separado ✅
+
+
+
+
+
+
 
 
 
