@@ -1,9 +1,13 @@
-import os 
+from pathlib import Path
 import sqlite3
 import datetime 
 
+
+db_path = Path(__file__).resolve().parent / "server" / "banco.db"
+db_path.parent.mkdir(exist_ok=True)  
+
 def criarBanco():
-    conn = sqlite3.connect('banco.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS funcionarios (
@@ -18,7 +22,7 @@ def criarBanco():
 criarBanco()
 
 def bancoDeHoras():
-    conn = sqlite3.connect('banco.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS horas (
@@ -43,7 +47,7 @@ bancoDeHoras()
 def cadastrarHorasEntrada(idFuncionario, nome):
     dataAtual = datetime.datetime.now().strftime("%Y-%m-%d")
     horarioEntrada = datetime.datetime.now().strftime("%H:%M:%S")
-    with sqlite3.connect('banco.db') as conn:
+    with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
         cursor.execute(
             'INSERT INTO horas (idFuncionario, nome, data, hora_entrada) VALUES (?, ?, ?, ?)',
@@ -55,7 +59,7 @@ def cadastrarHorasEntrada(idFuncionario, nome):
 def cadastrarHorasSaida(idFuncionario, nome):
     dataAtual = datetime.datetime.now().strftime("%Y-%m-%d")
     horarioSaida = datetime.datetime.now().strftime("%H:%M:%S")
-    with sqlite3.connect('banco.db') as conn:
+    with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
         cursor.execute(
             '''UPDATE horas SET hora_saida = ? 
@@ -93,7 +97,7 @@ def login():
     idFuncionario = input("Digite o ID do funcionário: ")
 
     if nome and idFuncionario:
-        conn = sqlite3.connect('banco.db')
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM funcionarios WHERE idFuncionario = ? AND nome = ?', (idFuncionario, nome))
         resultado = cursor.fetchone()
@@ -107,7 +111,7 @@ def login():
     
 
 def listarHorasFucionario(idfuncionario):
-    conn = sqlite3.connect('banco.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM horas WHERE idFuncionario = ?', (idfuncionario,))
     horas = cursor.fetchall()
@@ -119,7 +123,7 @@ def listarHorasFucionario(idfuncionario):
 
 
 def calcularHorasTrabalhadas(idFuncionario):
-    conn = sqlite3.connect('banco.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('SELECT hora_entrada, hora_saida FROM horas where idFuncionario = ?', (idFuncionario,))
     registros = cursor.fetchall()
@@ -147,7 +151,7 @@ while True:
 
     match escolhaMenu:
         case '1':
-            conn = sqlite3.connect('banco.db')
+            conn = sqlite3.connect(db_path)
             idFuncionario = input("Digite o ID do funcionário: ")
             nomeFuncionario = input("Digite o nome do funcionário: ")
             
@@ -159,7 +163,7 @@ while True:
             print(f"Funcionário '{nomeFuncionario}' cadastrado com sucesso com ID {idFuncionario}!")
 
         case '2':
-            conn = sqlite3.connect('banco.db')
+            conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
             cursor.execute('SELECT idFuncionario, nome FROM funcionarios')
             funcionarios = cursor.fetchall()
