@@ -153,7 +153,7 @@ while True:
     4. Sair
     5. Listar horas de um Funcionario
     6. Calcular horas trabalhadas
-    ''')
+    Digite a opção desejada: ''')
 
     match escolhaMenu:
         case '1':

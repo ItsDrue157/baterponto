@@ -3,7 +3,7 @@
 
 software que faça o controle dos pontos (horario de entrada e saida)
 
-requisitos: tkinter e python 
+requisitos: python 
 
 nome: Controle de Ponto Digital
 
@@ -23,11 +23,7 @@ Fazer o controle dos horarios de entrada e o de saida de cada funcionario, bem c
 
 to do:
 total de horas dos funcionarios e individual
-criar tratamento de erro 
 criar guia de como usar
-
-
-
 
 
 
@@ -44,6 +40,7 @@ cadastrar cada hora em cada funcionario ✅
 marcar data e hora em um banco separado ✅
 listar datas e horarios trabalhados de um funcionario especifico ✅
 formatação do caminho que fica o banco de dados ✅
+criar tratamento de erro ✅
 
 
 
