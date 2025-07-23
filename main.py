@@ -88,9 +88,6 @@ def menuLogin(idFuncionario, nome):
 
 
 
-
-
-
 def login():
     nome = input("Digite o nome do funcionário: ")
     idFuncionario = input("Digite o ID do funcionário: ")
@@ -109,19 +106,31 @@ def login():
         pass
     
 
-def listarHorasFucionario(ifuncionario):
+def listarHorasFucionario(idfuncionario):
     conn = sqlite3.connect('banco.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM horas WHERE idFuncionario = ?', (ifuncionario,))
+    cursor.execute('SELECT * FROM horas WHERE idFuncionario = ?', (idfuncionario,))
     horas = cursor.fetchall()
     conn.close()
     if horas:
-        print(f"Listando horas do funcionário {ifuncionario}:")
+        print(f"Listando horas do funcionário {idfuncionario}:")
         for hora in horas:
             print(f"Data: {hora[3]}, Entrada: {hora[4]}, Saída: {hora[5]}")
 
 
-
+def calcularHorasTrabalhadas(idFuncionario):
+    conn = sqlite3.connect('banco.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT hora_entrada, hora_saida FROM horas where idFuncionario = ?', (idFuncionario,))
+    registros = cursor.fetchall()
+    conn.close()
+    total_horas = datetime.timedelta()
+    for entrada, saida in registros:
+        if entrada and saida:
+            entrada = datetime.datetime.strptime(entrada, "%H:%M:%S")
+            saida = datetime.datetime.strptime(saida, "%H:%M:%S")
+            total_horas += (saida - entrada)
+    print(f"Total de horas trabalhadas: {total_horas} para o funcionário {idFuncionario}")
 
 
 
@@ -134,8 +143,7 @@ while True:
     3. Fazer Login
     4. Sair
     5. Listar horas de um Funcionario
-                        
-                        ''')
+    6. Calcular horas trabalhadas                    ''')
 
     match escolhaMenu:
         case '1':
@@ -171,3 +179,6 @@ while True:
         case '5':
             idFuncionario = input("Digite o ID do funcionário para listar as horas: ")
             listarHorasFucionario(idFuncionario)
+        case '6':
+            idFuncionario = input("Digite o ID do funcionário para calcular as horas trabalhadas: ")
+            calcularHorasTrabalhadas(idFuncionario)
