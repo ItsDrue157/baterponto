@@ -53,7 +53,7 @@ def cadastrarHorasEntrada(idFuncionario, nome):
             'INSERT INTO horas (idFuncionario, nome, data, hora_entrada) VALUES (?, ?, ?, ?)',
             (idFuncionario, nome, dataAtual, horarioEntrada)
         )
-        print(f"Horário de ENTRADA registrado com sucesso para o funcionário {idFuncionario} ({nome}) às {horarioEntrada}")
+        print(f"Horário de ENTRADA registrado com sucesso para o funcionario {idFuncionario} ({nome}) às {horarioEntrada}")
         conn.commit()
 
 def cadastrarHorasSaida(idFuncionario, nome):
@@ -67,7 +67,7 @@ def cadastrarHorasSaida(idFuncionario, nome):
             (horarioSaida, idFuncionario, dataAtual)
         )
         if cursor.rowcount > 0:
-            print(f"Horário de saida registrado com sucesso para o funcionário {idFuncionario} ({nome}) as {horarioSaida}")
+            print(f"Horário de saida registrado com sucesso para o funcionario {idFuncionario} ({nome}) as {horarioSaida}")
         else:
             print("Nenhum registro de entrada encontrado para hoje.")
         conn.commit()
@@ -93,8 +93,8 @@ def menuLogin(idFuncionario, nome):
 
 
 def login():
-    nome = input("Digite o nome do funcionário: ")
-    idFuncionario = input("Digite o ID do funcionário: ")
+    nome = input("Digite o nome do funcionario: ")
+    idFuncionario = input("Digite o ID do funcionario: ")
 
     if nome and idFuncionario:
         conn = sqlite3.connect(db_path)
@@ -106,7 +106,7 @@ def login():
             print(f"Login realizado com sucesso para {nome} (ID: {idFuncionario})!")
             menuLogin(idFuncionario, nome)
     else:
-        print("Funcionário não encontrado ou dados incorretos.")
+        print("funcionario não encontrado ou dados incorretos.")
         pass
     
 
@@ -117,9 +117,11 @@ def listarHorasFucionario(idfuncionario):
     horas = cursor.fetchall()
     conn.close()
     if horas:
-        print(f"Listando horas do funcionário {idfuncionario}:")
+        print(f"Listando horas do funcionario {idfuncionario}:")
         for hora in horas:
             print(f"Data: {hora[3]}, Entrada: {hora[4]}, Saída: {hora[5]}")
+    else:
+        print(f"Nenhum registro de horas encontrado para o funcionario {idfuncionario}.")
 
 
 def calcularHorasTrabalhadas(idFuncionario):
@@ -134,7 +136,10 @@ def calcularHorasTrabalhadas(idFuncionario):
             entrada = datetime.datetime.strptime(entrada, "%H:%M:%S")
             saida = datetime.datetime.strptime(saida, "%H:%M:%S")
             total_horas += (saida - entrada)
-    print(f"Total de horas trabalhadas: {total_horas} para o funcionário {idFuncionario}")
+        else: 
+            print(f"Registro incompleto para o funcionario {idFuncionario}.")
+            return
+    print(f"Total de horas trabalhadas: {total_horas} para o funcionario {idFuncionario}")
 
 
 
@@ -147,20 +152,21 @@ while True:
     3. Fazer Login
     4. Sair
     5. Listar horas de um Funcionario
-    6. Calcular horas trabalhadas                    ''')
+    6. Calcular horas trabalhadas
+    ''')
 
     match escolhaMenu:
         case '1':
             conn = sqlite3.connect(db_path)
-            idFuncionario = input("Digite o ID do funcionário: ")
-            nomeFuncionario = input("Digite o nome do funcionário: ")
+            idFuncionario = input("Digite o ID do funcionario: ")
+            nomeFuncionario = input("Digite o nome do funcionario: ")
             
             cursor = conn.cursor()
             cursor.execute('INSERT INTO funcionarios (idFuncionario, nome) VALUES (?,?)', (idFuncionario, nomeFuncionario))
             conn.commit()
             conn.close()
            
-            print(f"Funcionário '{nomeFuncionario}' cadastrado com sucesso com ID {idFuncionario}!")
+            print(f"funcionario '{nomeFuncionario}' cadastrado com sucesso com ID {idFuncionario}!")
 
         case '2':
             conn = sqlite3.connect(db_path)
@@ -170,10 +176,10 @@ while True:
             
             conn.close()
             
-            print("Listando Funcionários:")
+            print("Listando funcionarios:")
             
             for idFuncionario, nome in funcionarios:
-                 print(f"O Funcionário {nome} tem o id {idFuncionario}")
+                 print(f"O funcionario {nome} tem o id {idFuncionario}")
         
         case '3':
             login()
@@ -181,8 +187,8 @@ while True:
             print("Saindo do sistema...")
             break
         case '5':
-            idFuncionario = input("Digite o ID do funcionário para listar as horas: ")
+            idFuncionario = input("Digite o ID do funcionario para listar as horas: ")
             listarHorasFucionario(idFuncionario)
         case '6':
-            idFuncionario = input("Digite o ID do funcionário para calcular as horas trabalhadas: ")
+            idFuncionario = input("Digite o ID do funcionario para calcular as horas trabalhadas: ")
             calcularHorasTrabalhadas(idFuncionario)
