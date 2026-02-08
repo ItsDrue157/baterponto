@@ -1,6 +1,7 @@
 from pathlib import Path
 import sqlite3
-import datetime 
+from datetime import * 
+import random
 
 
 db_path = Path(__file__).resolve().parent / "server" / "banco.db"
@@ -158,7 +159,9 @@ while True:
     match escolhaMenu:
         case '1':
             conn = sqlite3.connect(db_path)
-            idFuncionario = input("Digite o ID do funcionario: ")
+            ano_atual = date.today().year
+            idFuncionario = str(ano_atual) + str(random.randint(1,99999999))
+            print("debug " + str(idFuncionario))
             nomeFuncionario = input("Digite o nome do funcionario: ")
             
             cursor = conn.cursor()

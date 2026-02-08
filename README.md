@@ -22,7 +22,6 @@ Fazer o controle dos horarios de entrada e o de saida de cada funcionario, bem c
 
 
 to do:
-total de horas dos funcionarios e individual
 criar guia de como usar
 
 
