@@ -10,7 +10,7 @@ nome: Controle de Ponto Digital
 prazo: ???
 
 
-foi usado ia para consulta, verificação de erros e outros. Nenhum trecho deste codigo foi feito puramente por ia.
+foi usado ia para consulta, verificação de erros e outros. Nenhum trecho deste codigo foi feito puramente por ia.*
 
 
 Ideias: 
@@ -22,7 +22,7 @@ Fazer o controle dos horarios de entrada e o de saida de cada funcionario, bem c
 
 
 to do:
-criar guia de como usar
+
 
 
 
@@ -38,15 +38,15 @@ criar sistema de login de funcionario ✅
 cadastrar cada hora em cada funcionario ✅
 marcar data e hora em um banco separado ✅
 listar datas e horarios trabalhados de um funcionario especifico ✅
-formatação do caminho que fica o banco de dados ✅
+formatação do caminho do banco de dados ✅
 criar tratamento de erro ✅
+criar guia de como usar ✅
 
 
 
 
 
 
-
-
-
-
+* IA nao foi utilizada em forma de criar codigos de forma primaria, e sim de forma secundaria.
+Utilizando como forma de estudo e aprendizado
+IAs utilizadas: chatGPT e GeminiIA

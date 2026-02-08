@@ -1,9 +1,9 @@
 Seja Bem-Vindo ao Software Controle de Ponto. Foi pensado para ser implementado como solução primaria para uma empresa de porte pequeno, onde um funcionario faria o controle.
 
-COMO USAR: ira aparecer um menu onde nele tera 6 opções, cada numero representa uma opção, digite o numero correspondente a opção escolhida.
+COMO USAR: No menu primario, tem 7 opcoes, cada uma faz a opcao descrita. 
 
 Na pasta do onde o programa foi salvo, tera uma pasta chamada "server" onde dentro dela tera um aquivo chamado ,"banco.db", este arquivo representa o banco de dados. Para mais 
-detalhes abra-o utilizando algum Software de gerenciamento de Bancos de Dados. Foi utlizado o DB Browser (SQLITE).
+detalhes abra-o utilizando algum Software de gerenciamento de Bancos de Dados. Foi utlizado o DB Browser (SQLITE). (https://sqlitebrowser.org/dl/)
 
 
 Recursos necessarios para rodar este programa. 
