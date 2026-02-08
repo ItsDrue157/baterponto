@@ -39,8 +39,23 @@ def bancoDeHoras():
     conn.close()
 bancoDeHoras()
 
+def gerarIdFuncionario():
+    ano_atual = date.today().year
+    idFuncionario = str(ano_atual) + str(random.randint(1,99999999))
+    print("debug " + str(idFuncionario))
+    return idFuncionario
 
 
+
+def cadastrarFuncionario(idFuncionario, nomeFuncionario):
+    idFuncionario = gerarIdFuncionario()
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO funcionarios (idFuncionario, nome) VALUES (?,?)', (idFuncionario, nomeFuncionario))
+    conn.commit()   
+    conn.close()
+    print(f"funcionario '{nomeFuncionario}' cadastrado com sucesso com ID {idFuncionario}!")
+    return idFuncionario, nomeFuncionario
 
 
 
@@ -143,6 +158,16 @@ def calcularHorasTrabalhadas(idFuncionario):
     print(f"Total de horas trabalhadas: {total_horas} para o funcionario {idFuncionario}")
 
 
+def listarFuncionarios():
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('SELECT idFuncionario, nome FROM funcionarios')
+    funcionarios = cursor.fetchall()
+    conn.close()
+    for idFuncionario, nome in funcionarios:
+        print(f"O funcionario {nome} tem o id {idFuncionario}")
+    return funcionarios
+    
 
 
 
@@ -158,31 +183,12 @@ while True:
 
     match escolhaMenu:
         case '1':
-            conn = sqlite3.connect(db_path)
-            ano_atual = date.today().year
-            idFuncionario = str(ano_atual) + str(random.randint(1,99999999))
-            print("debug " + str(idFuncionario))
+            idFuncionario = gerarIdFuncionario()
             nomeFuncionario = input("Digite o nome do funcionario: ")
-            
-            cursor = conn.cursor()
-            cursor.execute('INSERT INTO funcionarios (idFuncionario, nome) VALUES (?,?)', (idFuncionario, nomeFuncionario))
-            conn.commit()
-            conn.close()
-           
-            print(f"funcionario '{nomeFuncionario}' cadastrado com sucesso com ID {idFuncionario}!")
+            cadastrarFuncionario(idFuncionario, nomeFuncionario)
 
         case '2':
-            conn = sqlite3.connect(db_path)
-            cursor = conn.cursor()
-            cursor.execute('SELECT idFuncionario, nome FROM funcionarios')
-            funcionarios = cursor.fetchall()
-            
-            conn.close()
-            
-            print("Listando funcionarios:")
-            
-            for idFuncionario, nome in funcionarios:
-                 print(f"O funcionario {nome} tem o id {idFuncionario}")
+            listarFuncionarios()
         
         case '3':
             login()
