@@ -3,6 +3,12 @@ import sqlite3
 from datetime import * 
 import random
 
+def menuAdmin(senha):
+    senha = "Carlos"
+    return senha
+
+
+
 
 db_path = Path(__file__).resolve().parent / "server" / "banco.db"
 db_path.parent.mkdir(exist_ok=True)  
@@ -47,7 +53,7 @@ def gerarIdFuncionario():
 
 
 
-def cadastrarFuncionario(idFuncionario, nomeFuncionario):
+def cadastrarFuncionario(nomeFuncionario):
     idFuncionario = gerarIdFuncionario()
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -168,7 +174,15 @@ def listarFuncionarios():
         print(f"O funcionario {nome} tem o id {idFuncionario}")
     return funcionarios
     
-
+def apagarFuncionario(excluirFuncionario):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM funcionarios WHERE idFuncionario = ? ', (excluirFuncionario,))
+    conn.commit()
+    excluirFuncionario = cursor.fetchall()
+    conn.close()
+    return excluirFuncionario
+    
 
 
 while True:
@@ -179,13 +193,14 @@ while True:
     4. Sair
     5. Listar horas de um Funcionario
     6. Calcular horas trabalhadas
+    7. Menu Admin
     Digite a opção desejada: ''')
 
     match escolhaMenu:
         case '1':
             idFuncionario = gerarIdFuncionario()
             nomeFuncionario = input("Digite o nome do funcionario: ")
-            cadastrarFuncionario(idFuncionario, nomeFuncionario)
+            cadastrarFuncionario(nomeFuncionario)
 
         case '2':
             listarFuncionarios()
@@ -201,3 +216,13 @@ while True:
         case '6':
             idFuncionario = input("Digite o ID do funcionario para calcular as horas trabalhadas: ")
             calcularHorasTrabalhadas(idFuncionario)
+        case '7':
+            senha = input("Qual a senha: " )
+            if senha == menuAdmin(senha):
+                excluirFuncionario = input('Qual o id do Funcionario que deseja excluir? ')
+                print(f'O funcionario {excluirFuncionario} foi apagado com sucesso. ')
+                apagarFuncionario(excluirFuncionario)
+                exit
+            else:
+                print('acesso negado')
+
