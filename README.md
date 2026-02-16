@@ -1,52 +1,23 @@
 # baterponto
+Seja Bem-Vindo ao Software Controle de Ponto. Foi pensado para ser implementado como solução primaria para uma empresa de porte pequeno, onde um funcionario faria o controle.
+
+COMO USAR: No menu primario, tem 7 opcoes, cada uma faz a opcao descrita. 
+
+Na pasta do onde o programa foi salvo, tera uma pasta chamada "server" onde dentro dela tera um aquivo chamado ,"banco.db", este arquivo representa o banco de dados. Para mais 
+detalhes abra-o utilizando algum Software de gerenciamento de Bancos de Dados. Foi utlizado o DB Browser (SQLITE). (https://sqlitebrowser.org/dl/)
 
 
-software que faça o controle dos pontos (horario de entrada e saida)
+Recursos necessarios para rodar este programa. 
+Python, linguagem utlizada: https://www.python.org/downloads/
+Sistema operacional baseado em 64 bits.
 
-requisitos: python 
-
-nome: Controle de Ponto Digital
-
-prazo: ???
-
-
-foi usado ia para consulta, verificação de erros e outros. Nenhum trecho deste codigo foi feito puramente por ia.*
-
-
-Ideias: 
-Fazer o controle dos horarios de entrada e o de saida de cada funcionario, bem como criar este funcionario inseri-lo no banco de dados.
+"Trabalhar fora da caixa é transformar esforço em criatividade e rotina em oportunidades que ninguém mais enxergou." chatgpt - 2025
 
 
 
 
 
 
-to do:
-
-
-
-
-
-done: 
-sistema de bater ponto ✅
-entrada e saida ✅
-banco de dados ✅
-criar sistema para pesquisar nome do funcionario na lista e exibir somente os horarios dele ✅
-menu via cli ✅
-criar sistema de cadastro de funcionario ✅
-criar sistema de login de funcionario ✅
-cadastrar cada hora em cada funcionario ✅
-marcar data e hora em um banco separado ✅
-listar datas e horarios trabalhados de um funcionario especifico ✅
-formatação do caminho do banco de dados ✅
-criar tratamento de erro ✅
-criar guia de como usar ✅
-
-
-
-
-
-
-* IA nao foi utilizada em forma de criar codigos de forma primaria, e sim de forma secundaria.
+IA nao foi utilizada em forma de criar codigos de forma primaria, e sim de forma secundaria.
 Utilizando como forma de estudo e aprendizado
 IAs utilizadas: chatGPT e GeminiIA
